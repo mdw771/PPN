@@ -57,10 +57,11 @@ def process_and_visualize(model: Model, X_test: np.ndarray, Y_I_test: np.ndarray
     plt.subplots_adjust(wspace=0.3, hspace=0.3)
 
     # Amplitude
-    im1 = ax[0, 0].imshow(sub_image1)
-    plt.colorbar(im1, ax=ax[0, 0], fraction=0.046, pad=0.04)
-    ax[0, 0].axis('off')
-    ax[0, 0].set_title('Amplitude')
+    if sub_image1 is not None:
+        im1 = ax[0, 0].imshow(sub_image1)
+        plt.colorbar(im1, ax=ax[0, 0], fraction=0.046, pad=0.04)
+        ax[0, 0].axis('off')
+        ax[0, 0].set_title('Amplitude')
 
     im2 = ax[0, 1].imshow(stitched_amp)
     plt.colorbar(im2, ax=ax[0, 1], fraction=0.046, pad=0.04)
@@ -79,11 +80,12 @@ def process_and_visualize(model: Model, X_test: np.ndarray, Y_I_test: np.ndarray
         else:
             return r'${}\pi$'.format(m)
 
-    im3 = ax[1, 0].imshow(sub_image2)
-    cbar = plt.colorbar(im3, ax=ax[1, 0], fraction=0.046, pad=0.04)
-    cbar.ax.yaxis.set_major_formatter(plt.FuncFormatter(pi_formatter))
-    ax[1, 0].axis('off')
-    ax[1, 0].set_title('Phase')
+    if sub_image2 is not None:
+        im3 = ax[1, 0].imshow(sub_image2)
+        cbar = plt.colorbar(im3, ax=ax[1, 0], fraction=0.046, pad=0.04)
+        cbar.ax.yaxis.set_major_formatter(plt.FuncFormatter(pi_formatter))
+        ax[1, 0].axis('off')
+        ax[1, 0].set_title('Phase')
 
     im4 = ax[1, 1].imshow(stitched_phase)
     cbar = plt.colorbar(im4, ax=ax[1, 1], fraction=0.046, pad=0.04)
