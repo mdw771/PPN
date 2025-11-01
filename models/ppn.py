@@ -5,8 +5,8 @@ from tensorflow.keras.models import Model
 import numpy as np
 
 class PatchEncoder(tf.keras.layers.Layer):
-    def __init__(self, num_patches, embedding_dim):
-        super(PatchEncoder, self).__init__()
+    def __init__(self, num_patches, embedding_dim, **kwargs):
+        super(PatchEncoder, self).__init__(**kwargs)
         self.num_patches = num_patches
         self.embedding_dim = embedding_dim
         self.projection = Dense(embedding_dim)
@@ -17,9 +17,19 @@ class PatchEncoder(tf.keras.layers.Layer):
         encoded = self.projection(patch) + self.position_embedding(positions)
         return encoded
 
+    def get_config(self):
+        config = super(PatchEncoder, self).get_config()
+        config.update(
+            {
+                "num_patches": self.num_patches,
+                "embedding_dim": self.embedding_dim,
+            }
+        )
+        return config
+
 class EnhancedPolarAttention(tf.keras.layers.Layer):
-    def __init__(self, num_heads, key_dim):
-        super(EnhancedPolarAttention, self).__init__()
+    def __init__(self, num_heads, key_dim, **kwargs):
+        super(EnhancedPolarAttention, self).__init__(**kwargs)
         self.num_heads = num_heads
         self.key_dim = key_dim
         self.projection = tf.keras.layers.Dense(3 * key_dim)
@@ -65,6 +75,16 @@ class EnhancedPolarAttention(tf.keras.layers.Layer):
         x = tf.reshape(x, [B, N, self.key_dim])
         x = self.final_proj(x)
         return tf.reshape(x, [B, H, W, self.key_dim])
+
+    def get_config(self):
+        config = super(EnhancedPolarAttention, self).get_config()
+        config.update(
+            {
+                "num_heads": self.num_heads,
+                "key_dim": self.key_dim,
+            }
+        )
+        return config
 
 def build_ppn_model(h=32, w=32, patch_size=8, embedding_dim=32, num_heads=2, transformer_layers=2):
     num_patches = (h // patch_size) * (w // patch_size)
