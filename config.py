@@ -21,3 +21,6 @@ class Config:
     TRANSFORMER_LAYERS = 2
     BATCH_SIZE = 32
     EPOCHS = 30
+
+    # Directory for persisted artifacts
+    MODEL_SAVE_DIR = 'checkpoints'
