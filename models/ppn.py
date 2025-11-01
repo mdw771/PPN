@@ -124,7 +124,7 @@ def build_ppn_model(h=32, w=32, patch_size=8, embedding_dim=32, num_heads=2, tra
         x_polar = Conv2D(embedding_dim, 1, activation='relu')(x_polar)
 
     polar_features = Conv2D(128, 1, activation='relu')(x_polar)
-    polar_features = AveragePooling2D(pool_size=(8, 8))(polar_features)
+    polar_features = AveragePooling2D(pool_size=(8 * h // 32, 8 * w // 32))(polar_features)
 
     # Feature Fusion
     combined_features = Concatenate()([vit_features, polar_features])
@@ -137,6 +137,8 @@ def build_ppn_model(h=32, w=32, patch_size=8, embedding_dim=32, num_heads=2, tra
         x = Conv2DTranspose(64, 3, strides=2, padding='same', activation='relu')(x)
         x = BatchNormalization()(x)
         x = Conv2DTranspose(32, 3, strides=2, padding='same', activation='relu')(x)
+        x = BatchNormalization()(x)
+        x = Conv2DTranspose(16, 3, strides=2, padding='same', activation='relu')(x)
         x = BatchNormalization()(x)
         return Conv2DTranspose(1, 3, activation='sigmoid', padding='same')(x)
 

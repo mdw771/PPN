@@ -90,14 +90,14 @@ def train_ppn(model, X_train, Y_I_train, Y_phi_train, X_test, Y_I_test, Y_phi_te
     print("SSIM in phase:", calculate_ssim(ph_flat, Y_phi_test_flat))
 
     # Plot training history
-    plt.figure(figsize=(8, 5))
-    plt.plot(history.history['loss'], 'bo-', label='Training loss')
-    if 'val_loss' in history.history:
-        plt.plot(history.history['val_loss'], 'r^-', label='Validation loss')
-    plt.title('Training and Validation Loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.legend()
-    plt.show()
+    # plt.figure(figsize=(8, 5))
+    # plt.plot(history.history['loss'], 'bo-', label='Training loss')
+    # if 'val_loss' in history.history:
+    #     plt.plot(history.history['val_loss'], 'r^-', label='Validation loss')
+    # plt.title('Training and Validation Loss')
+    # plt.xlabel('Epochs')
+    # plt.ylabel('Loss')
+    # plt.legend()
+    # plt.show()
 
     return history, predictions

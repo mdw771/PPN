@@ -7,8 +7,8 @@ class Config:
 
     # Data parameters
     IMAGE_SIZE = (512, 512)
-    IMAGE_HEIGHT = 32
-    IMAGE_WIDTH = 32
+    IMAGE_HEIGHT = 64
+    IMAGE_WIDTH = 64
     OVERLAP_RATE = 75
     TRAIN_RATIO = 0.8
     POINT_SIZE = 9

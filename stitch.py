@@ -15,15 +15,15 @@ def stitch_patches(patches: np.ndarray, positions: np.ndarray, buffer_size: tupl
     return buffer / occupancy
 
 
-def main():
+def main(original_size: int = 32):
     positions = prepare_test_data()[-1]
     positions = positions + 256
     
     intensity_pred = tifffile.imread("predictions/intensity_pred.tiff")
     phase_pred = tifffile.imread("predictions/phase_pred.tiff")
     
-    intensity_pred = ndi.zoom(intensity_pred, [1, 4, 4])
-    phase_pred = ndi.zoom(phase_pred, [1, 4, 4])
+    intensity_pred = ndi.zoom(intensity_pred, [1, 128 / original_size, 128 / original_size])
+    phase_pred = ndi.zoom(phase_pred, [1, 128 / original_size, 128 / original_size])
     
     intensity_pred = intensity_pred[:, 32:96, 32:96]
     phase_pred = phase_pred[:, 32:96, 32:96]
@@ -38,4 +38,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(original_size=64)
