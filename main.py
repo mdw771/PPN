@@ -14,11 +14,28 @@ import h5py
 import tifffile
 
 
+def configure_single_gpu():
+    gpus = tf.config.list_physical_devices('GPU')
+    if not gpus:
+        print("No GPU detected, running on CPU.")
+        return
+
+    primary_gpu = gpus[0]
+    try:
+        tf.config.set_visible_devices(primary_gpu, 'GPU')
+        tf.config.experimental.set_memory_growth(primary_gpu, True)
+        print(f"Using GPU: {primary_gpu.name}")
+    except RuntimeError as err:
+        print(f"Failed to configure GPU settings: {err}")
+
+
 def main():
     # Set random seed
     tf.keras.backend.clear_session()
     np.random.seed(123)
     tf.random.set_seed(123)
+
+    configure_single_gpu()
 
     (
         X_train,
@@ -29,7 +46,7 @@ def main():
         Y_phi_test,
     ) = prepare_training_data()
 
-    # Build model
+    # Build and compile model
     model = build_ppn_model(
         h=Config.IMAGE_HEIGHT,
         w=Config.IMAGE_WIDTH,
@@ -37,6 +54,11 @@ def main():
         embedding_dim=Config.EMBEDDING_DIM,
         num_heads=Config.NUM_HEADS,
         transformer_layers=Config.TRANSFORMER_LAYERS
+    )
+
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=0.001),
+        loss='mean_squared_error'
     )
 
     # Train model

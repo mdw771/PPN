@@ -42,6 +42,17 @@ def calculate_ssim(image1, image2):
     return ssim(image1, image2, data_range=image2.max() - image2.min())
 
 def train_ppn(model, X_train, Y_I_train, Y_phi_train, X_test, Y_I_test, Y_phi_test, batch_size=32, epochs=30):
+    if model.optimizer is None:
+        raise RuntimeError("Model must be compiled before calling train_ppn.")
+
+    # Ensure GPU-friendly float32 tensors
+    X_train = X_train.astype(np.float32)
+    Y_I_train = Y_I_train.astype(np.float32)
+    Y_phi_train = Y_phi_train.astype(np.float32)
+    X_test = X_test.astype(np.float32)
+    Y_I_test = Y_I_test.astype(np.float32)
+    Y_phi_test = Y_phi_test.astype(np.float32)
+
     # Preprocessing
     X_train = X_train / np.max(X_train)
     Y_I_train = Y_I_train / np.max(Y_I_train)
@@ -56,9 +67,6 @@ def train_ppn(model, X_train, Y_I_train, Y_phi_train, X_test, Y_I_test, Y_phi_te
         min_lr=0.0001,
         verbose=1
     )
-
-    # Compile model
-    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss='mean_squared_error')
 
     # Train model
     history = model.fit(
