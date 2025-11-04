@@ -19,7 +19,7 @@ class Config:
     EMBEDDING_DIM = 32
     NUM_HEADS = 2
     TRANSFORMER_LAYERS = 2
-    BATCH_SIZE = 32
+    BATCH_SIZE = 4
     EPOCHS = 30
 
     # Directory for persisted artifacts
